@@ -62,6 +62,16 @@ const app = express()
 // Set a port for the server to listen on
 const port = args.port || args.p || process.env.PORT || 8080
 // Load app middleware here to serve routes, accept data requests, etc.
+//
+// Create and update access log
+// The morgan format below is the Apache Foundation combined format but with ISO8601 dates
+app.use(morgan(':remote-addr - :remote-user [:date[iso]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"',
+    {stream: fs.createWriteStream(path.join(logpath, 'access.log')), flags: 'a' }
+))
+// Serve static files
+const staticpath = args.stat || args.s || process.env.STATICPATH || path.join(__dirname, 'public')
+app.use('/', express.static(staticpath))
+
 // a04 code
 import { rps, rpsls } from './lib/rpsls.js'
 
@@ -102,15 +112,6 @@ app.get('/app/rpsls/play/:shot', (req, res) => {
 app.get('*', (req, res) => {
 	res.status(404).send('404 NOT FOUND');
 });
-
-// Create and update access log
-// The morgan format below is the Apache Foundation combined format but with ISO8601 dates
-app.use(morgan(':remote-addr - :remote-user [:date[iso]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"',
-    {stream: fs.createWriteStream(path.join(logpath, 'access.log')), flags: 'a' }
-))
-// Serve static files
-const staticpath = args.stat || args.s || process.env.STATICPATH || path.join(__dirname, 'public')
-app.use('/', express.static(staticpath))
 
 // Create app listener
 const server = app.listen(port)
