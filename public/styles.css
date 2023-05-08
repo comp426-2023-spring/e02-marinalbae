@@ -6,3 +6,46 @@ h1 {
 
 p {
 }
+
+p.active {
+    display: block;
+}
+
+p.inactive {
+    display: none;
+}
+
+div.active {
+    display: block;
+}
+
+div.inactive {
+    display: none;
+}
+
+input.active {
+    display: inline;
+}
+
+input.inactive {
+    display: none;
+}
+
+label.active {
+    display: inline;
+}
+
+label.inactive {
+    display: none;
+}
+
+button.active {
+    display: inline;
+}
+
+button.inactive {
+    display: none;
+}
+
+center {
+    text-align: center;

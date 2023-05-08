@@ -65,10 +65,6 @@ const port = args.port || args.p || process.env.PORT || 8080
 // a04 code
 import { rps, rpsls } from './lib/rpsls.js'
 
-var args = minimist(process.argv.slice(2));
-const port = args.port || 5000;
-const app = express();
-
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -119,6 +115,7 @@ app.use(morgan(':remote-addr - :remote-user [:date[iso]] ":method :url HTTP/:htt
 // Serve static files
 const staticpath = args.stat || args.s || process.env.STATICPATH || path.join(__dirname, 'public')
 app.use('/', express.static(staticpath))
+
 // Create app listener
 const server = app.listen(port)
 // Create a log entry on start
