@@ -10,7 +10,7 @@
 <body>
   <h1>Rock, Paper, Scissors</h1>
   <p id="modetext" style="display:inline"> Select a Game Mode:</p>
-  <label>	  
+  <label>
     <input type="radio" id="rps" name="game" value="standard" checked> Standard
   </label>
   <label>
@@ -25,16 +25,14 @@
     <input type="radio" name="mode" value="player"> Player 2
   </label>
   <br>
-  <p id="versus"> Player 1, Select Your Move to Throw Down!</p>
+  <p id="moveprompt"> Player 1, Select Your Move to Throw Down!</p>
   <div id="choices">
     <button type="submit" onclick="play('rock')">Rock</button>
     <button type="submit" onclick="play('paper')">Paper</button>
     <button type="submit"onclick="play('scissors')">Scissors</button>
   </div>
   <br>
-  <p id="player2-moves" style="display: none;">
-    Player 2, Select Your Move to Throw Down!
-  </p>
+  <p id="player2-moves" style="display: none;"> Player 2, Select Your Move to Throw Down!</p>
   <div id="player2-buttons" style="display: none;">
     <button type="submit" onclick="setPlayer2Choice('rock')">Rock</button>
     <button type="submit" onclick="setPlayer2Choice('paper')">Paper</button>
