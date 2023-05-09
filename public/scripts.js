@@ -2,60 +2,112 @@
 // check out the coin-server example from a previous COMP 426 semester.
 // https://github.com/jdmar3/coinserver
 
-function play() {
-    if (!document.getElementById("rps").checked && !document.getElementById("rpsls").checked) {
-        alert("Please select a game mode.");
-        throw new RangeError(`Must select game mode before playing.`);
+    let player1Choice;
+    let player2Choice;
+    let choices;
+
+    function play(choice) {
+      player1Choice = choice;
+      
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      document.getElementById('player1-choice').innerText = 'Player 1 Chose: ' + choice;
+      document.getElementById('player1-choice').style.display = 'block';
+
+      if (mode === 'computer') {
+        playAgainstComputer();
+      } else {
+        document.getElementById('player2-moves').style.display = 'block';
+        document.getElementById('player2-buttons').style.display = 'block';
+      }
     }
-    document.getElementById("game_options").className = "inactive";
-    document.getElementById("shot_options").className = "inactive";
-    document.getElementById("result").className = "active";
-    document.getElementById("play").className = "inactive";
-}
 
-function restart() {
-    document.getElementById("game_options").className = "active";
-    document.getElementById("shot_options").className = "inactive";
-    document.getElementById("result").className = "inactive";
-    document.getElementById("play").className = "active";
+    function playAgainstComputer() {
+      choices = getChoices();
+      player2Choice = choices[Math.floor(Math.random() * choices.length)];
 
-    // Uncheck all buttons
-    document.getElementById("rps").checked = false;
-    document.getElementById("rpsls").checked = false;
-    // Uncheck it and trigger the event for unchecking
-    if (document.getElementById("opponent").checked) {
-        document.getElementById("opponent").click();
+      document.getElementById('computer-choice').innerText = 'Computer Chose: ' + player2Choice;
+      document.getElementById('computer-choice').style.display = 'block';
+
+      determineWinner();
     }
-    document.getElementById("rock").checked = false;
-    document.getElementById("paper").checked = false;
-    document.getElementById("scissors").checked = false;
-    document.getElementById("lizard").checked = false;
-    document.getElementById("spock").checked = false;
-}
 
-function displayShots() {
-    let rps_checked = document.getElementById("rps").checked;
-    let rpsls_checked = document.getElementById("rpsls").checked;
-    if (!rps_checked && !rpsls_checked) {
-        alert("Please select a game mode before going to opponent mode.");
-        document.getElementById("opponent").checked = false;
-        throw new RangeError(`Must select game mode before going to opponent mode.`);
+    function setPlayer2Choice(choice) {
+      player2Choice = choice;
+      document.getElementById('player2-choice').innerText = 'Player 2 Chose: ' + choice;
+      document.getElementById('player2-choice').style.display = 'block';
+      determineWinner();
     }
-    let shot_options = document.getElementById("shot_options");
-    let opponent_checked = document.getElementById("opponent").checked;
-    shot_options.className = opponent_checked ? "active" : "inactive";
-}
 
-function displayRPSLSOptions() {
-    let rpsls_checked = document.getElementById("rpsls").checked;
+    function determineWinner() {
+        let rps_checked = document.getElementById("rps").checked;
+        let rpsls_checked = document.getElementById("rpsls").checked;
 
-    let rps_options = document.getElementsByName("rps_option");
-    rps_options.forEach((rps_option) => {
-        rps_option.className = "active";
+        let mode = rps_checked ? "rps" : "rpsls"
+        
+      let api = `${document.baseURI}app/${mode}/play/${player1Choice}`;
+	
+//	await fetch(api)
+//        .then(function(response) {
+//            return response.json();
+//        })
+//            .then(function(result) {
+//                console.log(result)
+//		document.getElementById('result').innerText = result.result;
+//		      });
+//	I couldn't get the URL to work so I hard coded the results.
+
+      if (player1Choice === player2Choice) {
+        document.getElementById('result').innerText = 'It\'s a tie!';
+      } else {
+        const winningChoices = {
+          'rock': ['scissors', 'lizard'],
+          'paper': ['rock', 'spock'],
+          'scissors': ['paper', 'lizard'],
+          'lizard': ['paper', 'spock'],
+          'spock': ['rock', 'scissors']
+        };
+
+        if (winningChoices[player1Choice].includes(player2Choice)) {
+          document.getElementById('result').innerText = 'Player 1 wins!';
+        } else {
+          document.getElementById('result').innerText = 'Player 2 wins!';
+        }
+      }
+    }
+
+    function resetGame() {
+      document.getElementById('computer-choice').style.display = 'none';
+      document.getElementById('player2-buttons').style.display = 'none';
+      document.getElementById('player2-moves').style.display = 'none';
+      document.getElementById('result').innerText = '';
+      document.getElementById('player1-choice').innerText = '';
+      document.getElementById('player2-choice').innerText = '';
+
+      updateChoices();
+    }
+
+    function updateChoices() {
+      const gameVariant = document.querySelector('input[name="game"]:checked').value;
+      choices = getChoices(gameVariant);
+
+      document.getElementById('choices').innerHTML = choices.map(choice => {
+        return `<button onclick="play('${choice}')">${choice.charAt(0).toUpperCase() + choice.slice(1)}</button>`;
+      }).join('');
+
+      document.getElementById('player2-buttons').innerHTML = choices.map(choice => {
+        return `<button onclick="setPlayer2Choice('${choice}')">${choice.charAt(0).toUpperCase() + choice.slice(1)}</button>`;
+      }).join('');
+    }
+
+    function getChoices(gameVariant) {
+      if (gameVariant === 'lizard-spock') {
+        return ['rock', 'paper', 'scissors', 'lizard', 'spock'];
+      }
+      return ['rock', 'paper', 'scissors'];
+    }
+
+    document.querySelectorAll('input[name="game"]').forEach(input => {
+      input.addEventListener('change', updateChoices);
     });
 
-    let rpsls_options = document.getElementsByName("rpsls_option");
-    rpsls_options.forEach((rpsls_option) => {
-        rpsls_option.className = rpsls_checked ? "active" : "inactive";
-    });
-}
+    updateChoices();

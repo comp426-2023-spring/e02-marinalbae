@@ -1,51 +1,13 @@
 body {
+      font-family: Arial, sans-serif;
+      text-align: center;
 }
-
-h1 {
+button {
+      font-size: 1.5rem;
+      padding: 10px 20px;
+      margin: 10px;
 }
-
-p {
+.result {
+      font-size: 2rem;
+      margin-top: 20px;
 }
-
-p.active {
-    display: block;
-}
-
-p.inactive {
-    display: none;
-}
-
-div.active {
-    display: block;
-}
-
-div.inactive {
-    display: none;
-}
-
-input.active {
-    display: inline;
-}
-
-input.inactive {
-    display: none;
-}
-
-label.active {
-    display: inline;
-}
-
-label.inactive {
-    display: none;
-}
-
-button.active {
-    display: inline;
-}
-
-button.inactive {
-    display: none;
-}
-
-center {
-    text-align: center;
