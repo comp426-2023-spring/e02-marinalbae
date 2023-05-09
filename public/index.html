@@ -1,60 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Rock Paper Scissors, Shoot!</title>
-        <!-- Link to your script file(s) and CSS in here somewhere -->
-	<meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles.css">
-        <script src="scripts.js"></script>
-    </head>
-    <body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock, Paper, Scissors</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    button {
+      font-size: 1.5rem;
+      padding: 10px 20px;
+      margin: 10px;
+    }
+    .result {
+      font-size: 2rem;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Rock, Paper, Scissors</h1>
+  <label>
+    <p id="modetext" id="modetext" style="display:inline"> Select a Game Mode:</p>	  
+    <input type="radio" id="rps" name="game" value="standard" checked> Standard
+  </label>
+  <label>
+    <input type="radio" id="rpsls" name="game" value="lizard-spock"> Lizard-Spock
+  </label>
+  <br>
+  <label>
+    <p id="versus" id="versus" style="display:inline"> Who Will You Play Against:</p>
+    <input type="radio" name="mode" value="computer" checked> Computer
+  </label>
+  <label>
+    <input type="radio" name="mode" value="player"> Player 2
+  </label>
+  <br>
+  <p id="versus" id="versus"> Player 1, Select Your Move to Throw Down!</p>
+  <div id="choices">
+    <button onclick="play('rock')">Rock</button>
+    <button onclick="play('paper')">Paper</button>
+    <button onclick="play('scissors')">Scissors</button>
+  </div>
+  <br>
+  <p id="player2-moves" style="display: none;">
+    Player 2, Select Your Move to Throw Down!
+  </p>
+  <div id="player2-buttons" style="display: none;">
+    <button onclick="setPlayer2Choice('rock')">Rock</button>
+    <button onclick="setPlayer2Choice('paper')">Paper</button>
+    <button onclick="setPlayer2Choice('scissors')">Scissors</button>
+  </div>
+  <p id="player1-choice" style="display: none;"></p>
+  <p id="player2-choice" style="display: none;"></p>
+  <p id="computer-choice" style="display: none;"></p>
+  <p class="result" id="result"></p>
+  <button onclick="resetGame()">Reset</button>
+  <p><a href="rules.html">Rules</a></p>
 
-    <!-- Your interface markup goes here -->
-    <!-- For interface examples, look in the `/examples/` directory in the root of your starter code repo. -->
-    <div id="buttons" class="active">
-        <button id="play" type="submit" name="control_option" onclick="play()">Play</button>
-        <button id="restart" type="submit" name="control_option" onclick="restart()">Restart</button>
-	<br><br>
-    </div>
+  <script>
+    let player1Choice;
+    let player2Choice;
+    let choices;
 
-    <div id="game_options" class="active">
-        <input type="radio" id="rps" name="game_option" value="rps" unchecked onclick="displayRPSLSOptions()">
-        <label for="rps">Play Rock, Paper, Scissors</label>
-        <br>
-        <input type="radio" id="rpsls" name="game_option" value="rpsls" unchecked onclick="displayRPSLSOptions()">
-        <label for="rpsls">Play Rock, Paper, Scissors, Lizard, Spock</label>
-        <br><br>
-        <input type="checkbox" id="opponent" name="opponent_option" value="opponent" unchecked onclick="displayShots()">
-        <label for="opponent">Play against an opponent</label>
-        <br><br>
-    </div>
+    function play(choice) {
+      player1Choice = choice;
+      
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      document.getElementById('player1-choice').innerText = 'Player 1 Chose: ' + choice;
+      document.getElementById('player1-choice').style.display = 'block';
 
-    <div id="shot_options" class="inactive">
-        <input type="radio" id="rock" name="rps_option" value="rock">
-        <label for="rock" name="rps_option">Rock</label>
-        <br>
-        <input type="radio" id="paper" name="rps_option" value="paper">
-        <label for="paper" name="rps_option">Paper</label>
-        <br>
-        <input type="radio" id="scissors" name="rps_option" value="scissors">
-        <label for="scissors" name="rps_option">Scissors</label>
-        <br>
-        <input type="radio" id="lizard" name="rpsls_option" value="lizard">
-        <label for="lizard" name="rpsls_option">Lizard</label>
-        <br>
-        <input type="radio" id="spock" name="rpsls_option" value="spock">
-        <label for="spock" name="rpsls_option">Spock</label>
-        <br><br>
-    </div>
+      if (mode === 'computer') {
+        playAgainstComputer();
+      } else {
+        document.getElementById('player2-moves').style.display = 'block';
+        document.getElementById('player2-buttons').style.display = 'block';
+      }
+    }
 
-    <p id="result" class="inactive">
-        Result text
-        <br><br>
-    </p>
+    function playAgainstComputer() {
+      choices = getChoices();
+      player2Choice = choices[Math.floor(Math.random() * choices.length)];
 
-    <p><a href="rules.html">Rules</a></p>
+      document.getElementById('computer-choice').innerText = 'Computer Chose: ' + player2Choice;
+      document.getElementById('computer-choice').style.display = 'block';
 
-    </body>
+      determineWinner();
+    }
+
+    function setPlayer2Choice(choice) {
+      player2Choice = choice;
+      document.getElementById('player2-choice').innerText = 'Player 2 Chose: ' + choice;
+      document.getElementById('player2-choice').style.display = 'block';
+      determineWinner();
+    }
+
+    function determineWinner() {
+        let rps_checked = document.getElementById("rps").checked;
+        let rpsls_checked = document.getElementById("rpsls").checked;
+
+        let mode = rps_checked ? "rps" : "rpsls"
+        
+      let api = `${document.baseURI}app/${mode}/play/${player1Choice}`;
+	
+//	await fetch(api)
+//        .then(function(response) {
+//            return response.json();
+//        })
+//            .then(function(result) {
+//                console.log(result)
+//		document.getElementById('result').innerText = result.result;
+//		      });
+//	I couldn't get the URL to work so I hard coded the results.
+
+      if (player1Choice === player2Choice) {
+        document.getElementById('result').innerText = 'It\'s a tie!';
+      } else {
+        const winningChoices = {
+          'rock': ['scissors', 'lizard'],
+          'paper': ['rock', 'spock'],
+          'scissors': ['paper', 'lizard'],
+          'lizard': ['paper', 'spock'],
+          'spock': ['rock', 'scissors']
+        };
+
+        if (winningChoices[player1Choice].includes(player2Choice)) {
+          document.getElementById('result').innerText = 'Player 1 wins!';
+        } else {
+          document.getElementById('result').innerText = 'Player 2 wins!';
+        }
+      }
+    }
+
+    function resetGame() {
+      document.getElementById('computer-choice').style.display = 'none';
+      document.getElementById('player2-buttons').style.display = 'none';
+      document.getElementById('player2-moves').style.display = 'none';
+      document.getElementById('result').innerText = '';
+      document.getElementById('player1-choice').innerText = '';
+      document.getElementById('player2-choice').innerText = '';
+
+      updateChoices();
+    }
+
+    function updateChoices() {
+      const gameVariant = document.querySelector('input[name="game"]:checked').value;
+      choices = getChoices(gameVariant);
+
+      document.getElementById('choices').innerHTML = choices.map(choice => {
+        return `<button onclick="play('${choice}')">${choice.charAt(0).toUpperCase() + choice.slice(1)}</button>`;
+      }).join('');
+
+      document.getElementById('player2-buttons').innerHTML = choices.map(choice => {
+        return `<button onclick="setPlayer2Choice('${choice}')">${choice.charAt(0).toUpperCase() + choice.slice(1)}</button>`;
+      }).join('');
+    }
+
+    function getChoices(gameVariant) {
+      if (gameVariant === 'lizard-spock') {
+        return ['rock', 'paper', 'scissors', 'lizard', 'spock'];
+      }
+      return ['rock', 'paper', 'scissors'];
+    }
+
+    document.querySelectorAll('input[name="game"]').forEach(input => {
+      input.addEventListener('change', updateChoices);
+    });
+
+    updateChoices();
+  </script>
+</body>
 </html>
+
+
