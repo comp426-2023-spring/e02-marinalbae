@@ -9,42 +9,42 @@
 </head>
 <body>
   <h1>Rock, Paper, Scissors</h1>
-  <label>
-    <p id="modetext" id="modetext" style="display:inline"> Select a Game Mode:</p>	  
+  <p id="modetext" style="display:inline"> Select a Game Mode:</p>
+  <label>	  
     <input type="radio" id="rps" name="game" value="standard" checked> Standard
   </label>
   <label>
     <input type="radio" id="rpsls" name="game" value="lizard-spock"> Lizard-Spock
   </label>
   <br>
+  <p id="versus" style="display:inline"> Who Will You Play Against:</p>
   <label>
-    <p id="versus" id="versus" style="display:inline"> Who Will You Play Against:</p>
     <input type="radio" name="mode" value="computer" checked> Computer
   </label>
   <label>
     <input type="radio" name="mode" value="player"> Player 2
   </label>
   <br>
-  <p id="versus" id="versus"> Player 1, Select Your Move to Throw Down!</p>
+  <p id="versus"> Player 1, Select Your Move to Throw Down!</p>
   <div id="choices">
-    <button onclick="play('rock')">Rock</button>
-    <button onclick="play('paper')">Paper</button>
-    <button onclick="play('scissors')">Scissors</button>
+    <button type="submit" onclick="play('rock')">Rock</button>
+    <button type="submit" onclick="play('paper')">Paper</button>
+    <button type="submit"onclick="play('scissors')">Scissors</button>
   </div>
   <br>
   <p id="player2-moves" style="display: none;">
     Player 2, Select Your Move to Throw Down!
   </p>
   <div id="player2-buttons" style="display: none;">
-    <button onclick="setPlayer2Choice('rock')">Rock</button>
-    <button onclick="setPlayer2Choice('paper')">Paper</button>
-    <button onclick="setPlayer2Choice('scissors')">Scissors</button>
+    <button type="submit" onclick="setPlayer2Choice('rock')">Rock</button>
+    <button type="submit" onclick="setPlayer2Choice('paper')">Paper</button>
+    <button type="submit" onclick="setPlayer2Choice('scissors')">Scissors</button>
   </div>
   <p id="player1-choice" style="display: none;"></p>
   <p id="player2-choice" style="display: none;"></p>
   <p id="computer-choice" style="display: none;"></p>
   <p class="result" id="result"></p>
-  <button onclick="resetGame()">Reset</button>
+  <button type="submit" onclick="resetGame()">Reset</button>
   <p><a href="rules.html">Rules</a></p>
 
   <script src="scripts.js"></script>
