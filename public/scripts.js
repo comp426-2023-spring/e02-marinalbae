@@ -96,8 +96,10 @@
     }
 
     function updateChoices() {
-      const gameVariant = document.querySelector('input[name="game"]:checked').value;
-      choices = getChoices(gameVariant);
+      let rps_checked = document.getElementById("rps").checked;
+      let rpsls_checked = document.getElementById("rpsls").checked;
+      let mode = rps_checked ? "rps" : "rpsls"
+      choices = getChoices(mode);
 
       document.getElementById('choices').innerHTML = choices.map(choice => {
         return `<button onclick="play('${choice}')">${choice.charAt(0).toUpperCase() + choice.slice(1)}</button>`;
