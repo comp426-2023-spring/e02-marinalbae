@@ -5,14 +5,13 @@
     let player1Choice;
     let player2Choice;
     let choices;
+    let player2;
 
     function play(choice) {
       player1Choice = choice;
       
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      document.getElementById('player1-choice').innerText = 'Player 1 Chose: ' + choice;
-      document.getElementById('player1-choice').style.display = 'block';
-
+      
       if (mode === 'computer') {
         playAgainstComputer();
       } else {
@@ -24,27 +23,32 @@
     function playAgainstComputer() {
       choices = getChoices();
       player2Choice = choices[Math.floor(Math.random() * choices.length)];
+      player2 = "Computer";
 
       document.getElementById('computer-choice').innerText = 'Computer Chose: ' + player2Choice;
       document.getElementById('computer-choice').style.display = 'block';
-
       determineWinner();
     }
 
     function setPlayer2Choice(choice) {
       player2Choice = choice;
+      player2 = "Player 2"
+      
       document.getElementById('player2-choice').innerText = 'Player 2 Chose: ' + choice;
       document.getElementById('player2-choice').style.display = 'block';
       determineWinner();
     }
 
     function determineWinner() {
+	document.getElementById('player1-choice').innerText = 'Player 1 Chose: ' + player1Choice;
+        document.getElementById('player1-choice').style.display = 'block';
+
         let rps_checked = document.getElementById("rps").checked;
         let rpsls_checked = document.getElementById("rpsls").checked;
 
         let mode = rps_checked ? "rps" : "rpsls"
         
-      let api = `${document.baseURI}app/${mode}/play/${player1Choice}`;
+        let api = `${document.baseURI}app/${mode}/play/${player1Choice}`;
 	
 //	await fetch(api)
 //        .then(function(response) {
@@ -54,12 +58,13 @@
 //                console.log(result)
 //		document.getElementById('result').innerText = result.result;
 //		      });
+
 //	I couldn't get the URL to work so I hard coded the results.
 
-      if (player1Choice === player2Choice) {
-        document.getElementById('result').innerText = 'It\'s a tie!';
-      } else {
-        const winningChoices = {
+        if (player1Choice === player2Choice) {
+          document.getElementById('result').innerText = 'It\'s a tie!';
+        } else {
+          const winningChoices = {
           'rock': ['scissors', 'lizard'],
           'paper': ['rock', 'spock'],
           'scissors': ['paper', 'lizard'],
@@ -70,7 +75,7 @@
         if (winningChoices[player1Choice].includes(player2Choice)) {
           document.getElementById('result').innerText = 'Player 1 wins!';
         } else {
-          document.getElementById('result').innerText = 'Player 2 wins!';
+          document.getElementById('result').innerText = player2 + ' wins!';
         }
       }
     }
