@@ -21,7 +21,11 @@
     }
 
     function playAgainstComputer() {
-      choices = getChoices();
+      let rps_checked = document.getElementById("rps").checked;
+      let rpsls_checked = document.getElementById("rpsls").checked;
+      let mode = rps_checked ? "rps" : "rpsls"
+
+      choices = getChoices(mode);
       player2Choice = choices[Math.floor(Math.random() * choices.length)];
       player2 = "Computer";
 
@@ -105,7 +109,7 @@
     }
 
     function getChoices(gameVariant) {
-      if (gameVariant === 'lizard-spock') {
+      if (gameVariant === 'rpsls') {
         return ['rock', 'paper', 'scissors', 'lizard', 'spock'];
       }
       return ['rock', 'paper', 'scissors'];
